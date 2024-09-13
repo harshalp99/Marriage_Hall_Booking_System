@@ -1,0 +1,5 @@
+package com.harshal.hallservice.repository;
+
+public class HallRepository {
+
+}

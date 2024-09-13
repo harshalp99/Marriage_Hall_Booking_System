@@ -1,0 +1,37 @@
+package com.harshal.userservice.service;
+
+import com.harshal.userservice.model.User;
+import com.harshal.userservice.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Method to save a user
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    // Method to update a user by ID
+    public User updateUser(Long id, User updatedUser) {
+        Optional<User> existingUserOpt = userRepository.findById(id);
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setPassword(updatedUser.getPassword());
+            // Add other fields you want to update
+            return userRepository.save(existingUser);
+        } else {
+            throw new RuntimeException("User not found with id: " + id);  // Customize exception handling if necessary
+        }
+    }
+
+    // Other service methods like delete, getUserById, etc.
+}

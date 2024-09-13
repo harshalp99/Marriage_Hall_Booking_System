@@ -1,0 +1,13 @@
+package com.harshal.userservice.service;
+
+import com.harshal.userservice.model.User;
+
+import java.util.List;
+
+public interface UserService {
+    User registerUser(User user);
+    User loginUser(String username, String password);
+    User updateUser(Long id, User user);
+    void deleteUser(Long id);
+    List<User> getAllUsers();
+}

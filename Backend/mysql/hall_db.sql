@@ -1,0 +1,1 @@
+CREATE DATABASE hall_db;

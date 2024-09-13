@@ -1,0 +1,5 @@
+package com.harshal.hallservice.service;
+
+public class HallService {
+
+}

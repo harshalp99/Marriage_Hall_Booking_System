@@ -1,0 +1,5 @@
+package com.harshal.hallservice.controller;
+
+public class HallController {
+
+}

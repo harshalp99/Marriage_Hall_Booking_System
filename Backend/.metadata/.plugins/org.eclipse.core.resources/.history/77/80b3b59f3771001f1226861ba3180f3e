@@ -1,0 +1,5 @@
+package com.harshal.bookingservice.repository;
+
+public class BookingRepository {
+
+}

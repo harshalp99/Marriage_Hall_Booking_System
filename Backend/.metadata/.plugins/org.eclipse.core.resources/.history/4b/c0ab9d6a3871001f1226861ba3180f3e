@@ -1,0 +1,5 @@
+package com.harshal.reviewservice.model;
+
+public class Review {
+
+}
