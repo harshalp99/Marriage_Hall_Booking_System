@@ -1,0 +1,55 @@
+package com.harshal.bookingservice.service;
+
+import com.harshal.bookingservice.dto.BookingDTO;
+import com.harshal.bookingservice.entity.Booking;
+import com.harshal.bookingservice.feign.HallFeignClient;
+import com.harshal.bookingservice.feign.UserFeignClient;
+import com.harshal.bookingservice.repository.BookingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class BookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private HallFeignClient hallFeignClient;
+
+    @Autowired
+    private UserFeignClient userFeignClient;
+
+    // Get all bookings
+    public List<BookingDTO> getAllBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings.stream()
+                       .map(booking -> new BookingDTO(booking.getId(), booking.getHallId(), booking.getUserId(), booking.getBookingDate(), booking.getStatus()))
+                       .collect(Collectors.toList());
+    }
+
+    // Create or update a booking
+    public BookingDTO saveBooking(BookingDTO bookingDTO) {
+        Booking booking = new Booking(bookingDTO.getId(), bookingDTO.getHallId(), bookingDTO.getUserId(), bookingDTO.getBookingDate(), bookingDTO.getStatus());
+        booking = bookingRepository.save(booking);
+        return new BookingDTO(booking.getId(), booking.getHallId(), booking.getUserId(), booking.getBookingDate(), booking.getStatus());
+    }
+
+    // Delete a booking by ID
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
+    }
+
+    // Get hall details for a booking
+    public Object getHallForBooking(Long hallId) {
+        return hallFeignClient.getHallById(hallId);
+    }
+
+    // Get user details for a booking
+    public Object getUserForBooking(Long userId) {
+        return userFeignClient.getUserById(userId);
+    }
+}

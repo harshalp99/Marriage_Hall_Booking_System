@@ -1,0 +1,52 @@
+package com.harshal.bookingservice.service;
+
+import com.harshal.bookingservice.dto.HallDTO;
+import com.harshal.bookingservice.feign.HallFeignClient;
+import com.harshal.bookingservice.model.Booking;
+import com.harshal.bookingservice.repository.BookingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class BookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private HallFeignClient hallFeignClient;
+
+    // Create a new booking
+    public Booking createBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    // Get all bookings
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    // Get booking by ID
+    public Booking getBookingById(Long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+    }
+
+    // Update a booking
+    public Booking updateBooking(Long bookingId, Booking bookingDetails) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus(bookingDetails.getStatus());
+        return bookingRepository.save(booking);
+    }
+
+    // Delete a booking
+    public void deleteBooking(Long bookingId) {
+        bookingRepository.deleteById(bookingId);
+    }
+
+    // Get hall details for a booking using HallFeignClient
+    public HallDTO getHallForBooking(Long hallId) {
+        return hallFeignClient.getHallById(hallId);
+    }
+}

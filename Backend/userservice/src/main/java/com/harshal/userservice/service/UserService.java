@@ -1,15 +1,20 @@
 package com.harshal.userservice.service;
 
+import com.harshal.userservice.dto.BookingDTO;
+import com.harshal.userservice.dto.ReviewDTO;
+import com.harshal.userservice.feign.BookingFeignClient;
+import com.harshal.userservice.feign.ReviewFeignClient;
+import com.harshal.userservice.model.User;
+import com.harshal.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.harshal.userservice.model.User;
-import com.harshal.userservice.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +26,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // Injecting Feign Clients
+    @Autowired
+    private BookingFeignClient bookingFeignClient;
+
+    @Autowired
+    private ReviewFeignClient reviewFeignClient;
 
     // User-related methods
     public User createUser(User user) {
@@ -54,6 +65,16 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(userId);
     }
 
+    // Fetch all bookings for a specific user using BookingFeignClient
+    public List<BookingDTO> getBookingsByUserId(Long userId) {
+        return bookingFeignClient.getBookingsByUserId(userId);
+    }
+
+    // Fetch all reviews for a specific user using ReviewFeignClient
+    public List<ReviewDTO> getReviewsByUserId(Long userId) {
+        return reviewFeignClient.getReviewsByUserId(userId);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
@@ -64,6 +85,4 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.get().getUsername(), user.get().getPassword(), new ArrayList<>());
     }
-
-   
 }

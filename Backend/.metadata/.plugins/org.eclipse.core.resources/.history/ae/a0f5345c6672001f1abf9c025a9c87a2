@@ -1,0 +1,50 @@
+package com.harshal.reviewservice.service;
+
+import com.harshal.reviewservice.model.Review;
+import com.harshal.reviewservice.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ReviewService {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    // Get all reviews
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
+    // Get review by ID
+    public Optional<Review> getReviewById(Long id) {
+        return reviewRepository.findById(id);
+    }
+
+    // Add a new review
+    public Review addReview(Review review) {
+        return reviewRepository.save(review);
+    }
+
+    // Update review
+    public Review updateReview(Long id, Review reviewDetails) {
+        Optional<Review> reviewOptional = reviewRepository.findById(id);
+        if (reviewOptional.isPresent()) {
+            Review review = reviewOptional.get();
+            review.setUserId(reviewDetails.getUserId());
+            review.setHallId(reviewDetails.getHallId());
+            review.setRating(reviewDetails.getRating());
+            review.setComment(reviewDetails.getComment());
+            return reviewRepository.save(review);
+        }
+        return null; // Or handle exception
+    }
+
+    // Delete a review
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
+    }
+}

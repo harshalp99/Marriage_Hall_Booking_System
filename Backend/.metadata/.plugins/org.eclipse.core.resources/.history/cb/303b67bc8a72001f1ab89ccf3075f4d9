@@ -1,0 +1,47 @@
+package com.harshal.bookingservice.controller;
+
+import com.harshal.bookingservice.model.Booking;
+import com.harshal.bookingservice.service.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/bookings")
+public class BookingController {
+
+    @Autowired
+    private BookingService bookingService;
+
+    // Get all bookings
+    @GetMapping
+    public List<Booking> getAllBookings() {
+        return bookingService.getAllBookings();
+    }
+
+    // Get booking by ID
+    @GetMapping("/{id}")
+    public Booking getBookingById(@PathVariable Long bookingId) {
+        return bookingService.getBookingById(bookingId);
+    }
+
+    // Add a new booking
+    @PostMapping
+    public Booking addBooking(@RequestBody Booking booking) {
+        return bookingService.createBooking(booking);
+    }
+
+    // Update a booking
+    @PutMapping("/{id}")
+    public Booking updateBooking(@PathVariable Long id, @RequestBody Booking bookingDetails) {
+        return bookingService.updateBooking(id, bookingDetails);
+    }
+
+    // Delete a booking
+    @DeleteMapping("/{id}")
+    public void deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+    }
+}

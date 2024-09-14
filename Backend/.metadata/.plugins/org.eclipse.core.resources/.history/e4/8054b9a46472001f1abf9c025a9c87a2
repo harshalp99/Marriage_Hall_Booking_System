@@ -1,0 +1,5 @@
+package com.harshal.bookingservice.feign;
+
+public interface ReviewFeignClient {
+
+}

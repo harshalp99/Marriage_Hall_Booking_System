@@ -1,0 +1,5 @@
+package com.harshal.bookingservice.dto;
+
+public class UserDTO {
+
+}

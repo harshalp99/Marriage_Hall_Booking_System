@@ -1,0 +1,5 @@
+package com.harshal.hallservice.dto;
+
+public class HallDTO {
+
+}

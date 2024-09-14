@@ -7,27 +7,31 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String username;
     private String email;
     private String password;
+    
+    //Constructors
 
     public User() {}
 
-    public User(Long id, String username, String email, String password) {
-        this.id = id;
+    public User(Long userId, String username, String email, String password) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.password = password;
     }
+    
+    //Getters and Setters
 
     public Long getId() {
-        return id;
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

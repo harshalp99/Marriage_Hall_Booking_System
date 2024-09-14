@@ -1,0 +1,56 @@
+// hallservice/src/main/java/com/harshal/hallservice/service/HallService.java
+
+package com.harshal.hallservice.service;
+
+import com.harshal.hallservice.dto.HallDTO;
+import com.harshal.hallservice.feign.BookingFeignClient;
+import com.harshal.hallservice.feign.ReviewFeignClient;
+import com.harshal.hallservice.repository.HallRepository;
+import com.harshal.hallservice.entity.Hall;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class HallService {
+
+    @Autowired
+    private HallRepository hallRepository;
+
+    @Autowired
+    private BookingFeignClient bookingFeignClient;
+
+    @Autowired
+    private ReviewFeignClient reviewFeignClient;
+
+    // Get all halls
+    public List<HallDTO> getAllHalls() {
+        List<Hall> halls = hallRepository.findAll();
+        return halls.stream()
+                    .map(hall -> new HallDTO(hall.getId(), hall.getName(), hall.getLocation(), hall.getCapacity(), hall.getPrice()))
+                    .collect(Collectors.toList());
+    }
+
+    // Get bookings for a specific hall using BookingService
+    public List<Object> getBookingsForHall(Long hallId) {
+        return bookingFeignClient.getBookingsByHallId(hallId);
+    }
+
+    // Get reviews for a specific hall using ReviewService
+    public List<Object> getReviewsForHall(Long hallId) {
+        return reviewFeignClient.getReviewsByHallId(hallId);
+    }
+
+    // Save or update a hall
+    public HallDTO saveHall(HallDTO hallDTO) {
+        Hall hall = new Hall(hallDTO.getId(), hallDTO.getName(), hallDTO.getLocation(), hallDTO.getCapacity(), hallDTO.getPrice());
+        hall = hallRepository.save(hall);
+        return new HallDTO(hall.getId(), hall.getName(), hall.getLocation(), hall.getCapacity(), hall.getPrice());
+    }
+
+    // Delete a hall by ID
+    public void deleteHall(Long id) {
+        hallRepository.deleteById(id);
+    }
+}

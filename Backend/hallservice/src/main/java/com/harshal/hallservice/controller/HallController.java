@@ -6,22 +6,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/halls")
+@RequestMapping("/api/halls")
 public class HallController {
+	
     @Autowired
     private HallService hallService;
 
+    // Get all halls
     @GetMapping
     public List<Hall> getAllHalls() {
         return hallService.getAllHalls();
     }
 
-    @PostMapping
-    public Hall saveHall(@RequestBody Hall hall) {
-        return hallService.saveHall(hall);
+    // Get hall by ID
+    @GetMapping("/{hallId}")
+    public Optional<Hall> getHallById(@PathVariable Long hallId) {
+        return hallService.getHallById(hallId);
     }
 
-    // Additional endpoints for CRUD operations
+    // Add a new hall
+    @PostMapping
+    public Hall createHall(@RequestBody Hall hall) {
+        return hallService.createHall(hall);
+    }
+
+    // Update a hall
+    @PutMapping("/{hallId}")
+    public Hall updateHall(@PathVariable Long hallId, @RequestBody Hall hallDetails) {
+        return hallService.updateHall(hallId, hallDetails);
+    }
+
+    // Delete a hall
+    @DeleteMapping("/{hallId}")
+    public void deleteHall(@PathVariable Long hallId) {
+        hallService.deleteHall(hallId);
+    }
 }

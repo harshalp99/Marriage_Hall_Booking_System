@@ -1,0 +1,57 @@
+// reviewservice/src/main/java/com/harshal/reviewservice/service/ReviewService.java
+
+package com.harshal.reviewservice.service;
+
+import com.harshal.reviewservice.dto.ReviewDTO;
+import com.harshal.reviewservice.model.Review;
+import com.harshal.reviewservice.feign.HallFeignClient;
+import com.harshal.reviewservice.feign.UserFeignClient;
+import com.harshal.reviewservice.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ReviewService {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private HallFeignClient hallFeignClient;
+
+    @Autowired
+    private UserFeignClient userFeignClient;
+
+    // Get all reviews
+    public List<ReviewDTO> getAllReviews() {
+        List<Review> reviews = reviewRepository.findAll();
+        return reviews.stream()
+                      .map(review -> new ReviewDTO(review.getId(), review.getHallId(), review.getUserId(), review.getComment(), review.getRating()))
+                      .collect(Collectors.toList());
+    }
+
+    // Create or update a review
+    public ReviewDTO saveReview(ReviewDTO reviewDTO) {
+        Review review = new Review(reviewDTO.getId(), reviewDTO.getHallId(), reviewDTO.getUserId(), reviewDTO.getComment(), reviewDTO.getRating());
+        review = reviewRepository.save(review);
+        return new ReviewDTO(review.getId(), review.getHallId(), review.getUserId(), review.getComment(), review.getRating());
+    }
+
+    // Delete a review by ID
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
+    }
+
+    // Get hall details for a review
+    public Object getHallForReview(Long hallId) {
+        return hallFeignClient.getHallById(hallId);
+    }
+
+    // Get user details for a review
+    public Object getUserForReview(Long userId) {
+        return userFeignClient.getUserById(userId);
+    }
+}

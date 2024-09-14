@@ -9,19 +9,36 @@ import jakarta.persistence.Id;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long reviewId;
     private Long hallId;
     private Long userId;
     private String comment;
     private int rating;
     
-    // Getters and Setters
+    //Constructors
+    
+    public Review() {}
+    
+    
+    
+    public Review(Long reviewId, Long hallId, Long userId, String comment, int rating) {
+		super();
+		this.reviewId = reviewId;
+		this.hallId = hallId;
+		this.userId = userId;
+		this.comment = comment;
+		this.rating = rating;
+	}
+
+
+
+	// Getters and Setters
     
 	public Long getId() {
-		return id;
+		return reviewId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long reviewId) {
+		this.reviewId = reviewId;
 	}
 	public Long getHallId() {
 		return hallId;

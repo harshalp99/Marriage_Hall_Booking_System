@@ -1,0 +1,47 @@
+package com.harshal.reviewservice.controller;
+
+import com.harshal.reviewservice.model.Review;
+import com.harshal.reviewservice.service.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/reviews")
+public class ReviewController {
+
+    @Autowired
+    private ReviewService reviewService;
+
+    // Get all reviews
+    @GetMapping
+    public List<Review> getAllReviews() {
+        return reviewService.getAllReviews();
+    }
+
+    // Get review by ID
+    @GetMapping("/{id}")
+    public Optional<Review> getReviewById(@PathVariable Long id) {
+        return reviewService.getReviewById(id);
+    }
+
+    // Add a new review
+    @PostMapping
+    public Review createReview(@RequestBody Review review) {
+        return reviewService.createReview(review);
+    }
+
+    // Update a review
+    @PutMapping("/{id}")
+    public Review updateReview(@PathVariable Long id, @RequestBody Review reviewDetails) {
+        return reviewService.updateReview(id, reviewDetails);
+    }
+
+    // Delete a review
+    @DeleteMapping("/{id}")
+    public void deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
+    }
+}

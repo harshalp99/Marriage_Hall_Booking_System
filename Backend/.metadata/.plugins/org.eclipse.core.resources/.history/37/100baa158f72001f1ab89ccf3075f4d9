@@ -1,0 +1,17 @@
+package com.harshal.userservice.model;
+
+import com.harshal.bookingservice.dto.ReviewDTO;
+
+import java.util.List;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@FeignClient(name = "reviewservice", url = "http://localhost:8083")
+public interface ReviewFeignClient {
+
+    // Get Review by Hall ID
+    @GetMapping("/reviews/hall/{hallId}")
+    List<ReviewDTO> getReviewsByHallId(@PathVariable("hallId") Long hallId);
+}

@@ -1,0 +1,104 @@
+//package com.harshal.bookingservice.service;
+//
+//import com.harshal.bookingservice.model.Booking;
+//import com.harshal.bookingservice.repository.BookingRepository;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//@Service
+//public class BookingService {
+//
+//    @Autowired
+//    private BookingRepository bookingRepository;
+//
+//    // Get all bookings
+//    public List<Booking> getAllBookings() {
+//        return bookingRepository.findAll();
+//    }
+//
+//    // Get booking by ID
+//    public Optional<Booking> getBookingById(Long id) {
+//        return bookingRepository.findById(id);
+//    }
+//
+//    // Add a new booking
+//    public Booking addBooking(Booking booking) {
+//        return bookingRepository.save(booking);
+//    }
+//
+//    // Update booking
+//    public Booking updateBooking(Long id, Booking bookingDetails) {
+//        Optional<Booking> bookingOptional = bookingRepository.findById(id);
+//        if (bookingOptional.isPresent()) {
+//            Booking booking = bookingOptional.get();
+//            booking.setUserId(bookingDetails.getUserId());
+//            booking.setHallId(bookingDetails.getHallId());
+//            booking.setBookingDate(bookingDetails.getBookingDate());
+//            return bookingRepository.save(booking);
+//        }
+//        return null; // Or handle exception
+//    }
+//
+//    // Delete a booking
+//    public void deleteBooking(Long id) {
+//        bookingRepository.deleteById(id);
+//    }
+//}
+
+// bookingservice/src/main/java/com/harshal/bookingservice/service/BookingService.java
+
+package com.harshal.bookingservice.service;
+
+import com.harshal.bookingservice.dto.HallDTO;
+import com.harshal.bookingservice.feign.HallFeignClient;
+import com.harshal.bookingservice.model.Booking;
+import com.harshal.bookingservice.repository.BookingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class BookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private HallFeignClient hallFeignClient;
+
+    // Add a new booking
+    public Booking addBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    // Get all bookings
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    // Get booking by ID
+    public Booking getBookingById(Long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+    }
+
+    // Update a booking
+    public Booking updateBooking(Long bookingId, Booking bookingDetails) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus(bookingDetails.getStatus());
+        return bookingRepository.save(booking);
+    }
+
+    // Delete a booking
+    public void deleteBooking(Long bookingId) {
+        bookingRepository.deleteById(bookingId);
+    }
+
+    // Get hall details for a booking using HallFeignClient
+    public HallDTO getHallForBooking(Long hallId) {
+        return hallFeignClient.getHallById(hallId);
+    }
+}

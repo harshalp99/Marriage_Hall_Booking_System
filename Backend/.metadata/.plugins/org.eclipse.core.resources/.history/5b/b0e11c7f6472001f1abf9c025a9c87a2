@@ -1,0 +1,5 @@
+package com.harshal.reviewservice.feign;
+
+public class UserFeignClient {
+
+}

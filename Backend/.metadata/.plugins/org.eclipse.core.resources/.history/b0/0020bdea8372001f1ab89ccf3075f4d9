@@ -1,0 +1,48 @@
+package com.harshal.hallservice.controller;
+
+import com.harshal.hallservice.dto.HallDTO;
+import com.harshal.hallservice.model.Hall;
+import com.harshal.hallservice.service.HallService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/halls")
+public class HallController {
+	
+    @Autowired
+    private HallService hallService;
+
+    // Get all halls
+    @GetMapping
+    public List<HallDTO> getAllHalls() {
+        return hallService.getAllHalls();
+    }
+
+    // Get hall by ID
+    @GetMapping("/{id}")
+    public Optional<Hall> getHallById(@PathVariable Long id) {
+        return hallService.getHallById(id);
+    }
+
+    // Add a new hall
+    @PostMapping
+    public Hall addHall(@RequestBody Hall hall) {
+        return hallService.addHall(hall);
+    }
+
+    // Update a hall
+    @PutMapping("/{id}")
+    public Hall updateHall(@PathVariable Long id, @RequestBody Hall hallDetails) {
+        return hallService.updateHall(id, hallDetails);
+    }
+
+    // Delete a hall
+    @DeleteMapping("/{id}")
+    public void deleteHall(@PathVariable Long id) {
+        hallService.deleteHall(id);
+    }
+}

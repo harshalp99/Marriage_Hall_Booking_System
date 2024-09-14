@@ -9,18 +9,35 @@ import jakarta.persistence.Id;
 public class Hall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long hallId;
     private String name;
     private String location;
     private int capacity;
     private double price;
     
- // Getters and Setters
-	public Long getId() {
-		return id;
+    //Constructors
+    
+    public Hall() {}
+    
+    
+    
+ public Hall(Long hallId, String name, String location, int capacity, double price) {
+		super();
+		this.hallId = hallId;
+		this.name = name;
+		this.location = location;
+		this.capacity = capacity;
+		this.price = price;
 	}
-	public void setId(Long id) {
-		this.id = id;
+
+
+
+// Getters and Setters
+	public Long getId() {
+		return hallId;
+	}
+	public void setId(Long hallId) {
+		this.hallId = hallId;
 	}
 	public String getName() {
 		return name;

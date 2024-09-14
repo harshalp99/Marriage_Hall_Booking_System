@@ -1,0 +1,5 @@
+package com.harshal.hallservice.feign;
+
+public interface BookingFeignClient {
+
+}

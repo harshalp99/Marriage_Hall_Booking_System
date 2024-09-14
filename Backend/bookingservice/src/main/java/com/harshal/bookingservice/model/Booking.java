@@ -10,19 +10,32 @@ import java.util.Date;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bookingId;
     private Long hallId;
     private Long userId;
     private Date bookingDate;
     private String status;
     
-    // Getters and Setters
+    //Constructors
+    
+    public Booking() {}
+    
+    public Booking(Long bookingId, Long hallId, Long userId, Date bookingDate, String status) {
+		super();
+		this.bookingId = bookingId;
+		this.hallId = hallId;
+		this.userId = userId;
+		this.bookingDate = bookingDate;
+		this.status = status;
+	}
+    
+	// Getters and Setters
     
 	public Long getId() {
-		return id;
+		return bookingId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long bookingId) {
+		this.bookingId = bookingId;
 	}
 	public Long getHallId() {
 		return hallId;
